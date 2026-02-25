@@ -1,5 +1,11 @@
 # PhantomRecon
 
+![Python](https://img.shields.io/badge/Python-3.x-green)
+![Platform](https://img.shields.io/badge/Platform-Termux%20%7C%20Linux-brightgreen)
+![License](https://img.shields.io/github/license/sam10001863/PhantomRecon)
+![Repo Size](https://img.shields.io/github/repo-size/sam10001863/PhantomRecon)
+![Stars](https://img.shields.io/github/stars/sam10001863/PhantomRecon?style=social)
+
 > Android Professional Recon Engine  
 > Developed by Samrat Kharat
 
@@ -7,15 +13,24 @@
 
 ## Overview
 
-PhantomRecon is an automated reconnaissance framework built for security researchers, bug bounty hunters, and red team operators.
+PhantomRecon is an automated reconnaissance framework built for:
 
-It solves the common problem:
+- Security Researchers  
+- Bug Bounty Hunters  
+- Red Team Operators  
 
-"What should I scan after subdomain enumeration?"
+It solves a common problem:
 
-PhantomRecon intelligently chains professional security tools into a structured, automated reconnaissance workflow with clean CLI output and risk scoring.
+**"What should I scan after subdomain enumeration?"**
 
-Optimized for Termux (Android) and Linux environments.
+PhantomRecon intelligently chains professional security tools into a structured reconnaissance workflow with:
+
+- Mode-based scanning
+- Manual argument override
+- Interactive tool installation
+- Risk scoring engine
+- Clean animated CLI interface
+- Mobile optimization (Termux ready)
 
 ---
 
@@ -27,18 +42,17 @@ Optimized for Termux (Android) and Linux environments.
 - Port Scanning (naabu)
 - URL Collection (gau)
 - Vulnerability Scanning (nuclei)
+- Risk Exposure Scoring
 - Mode-Based Scanning (Fast / Aggressive / Balanced)
-- Manual Argument Override
-- Interactive Tool Installation
-- Risk Scoring Engine
-- Clean Animated CLI Interface
-- Mobile Optimized (Termux Ready)
+- Manual Overrides
+- Interactive Tool Checks
+- Professional CLI Output
 
 ---
 
-## Installation
+## Installation (Termux)
 
-### 1. Update Termux
+### 1. Update Environment
 
 ```bash
 pkg update && pkg upgrade -y
@@ -48,11 +62,11 @@ pkg install python golang git -y
 ### 2. Clone Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/PhantomRecon.git
+git clone https://github.com/sam10001863/PhantomRecon.git
 cd PhantomRecon
 ```
 
-### 3. Install Dependencies
+### 3. Install Python Dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -60,7 +74,7 @@ pip install -r requirements.txt
 
 ### 4. Install Required Go Tools
 
-Make sure CGO is disabled:
+Disable CGO:
 
 ```bash
 export CGO_ENABLED=0
@@ -119,7 +133,7 @@ python phantomrecon.py -d example.com --aggressive --ports top --threads 80 --se
 | Mode | Description |
 |------|------------|
 | Default | Balanced scan |
-| --fast | Lightweight quick recon |
+| --fast | Quick lightweight recon |
 | --aggressive | Deep full-scope scan |
 | --stealth | Low-rate scanning |
 
@@ -129,7 +143,7 @@ Manual flags override mode defaults.
 
 ## Output Structure
 
-All scan results are saved inside:
+All results are saved inside:
 
 ```
 output/<target_domain>/
@@ -195,7 +209,8 @@ Always obtain proper permission before scanning any target.
 
 ## Author
 
-Samrat Kharat
+Samrat Kharat  
+GitHub: https://github.com/sam10001863
 
 ---
 
@@ -213,4 +228,3 @@ Samrat Kharat
 ## License
 
 MIT License
-
