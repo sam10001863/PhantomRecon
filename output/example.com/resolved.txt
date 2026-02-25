@@ -9,4 +9,6 @@ www.example.com -> 104.18.27.120
 example.com -> 104.18.26.120
 example.com -> 104.18.26.120
 m.testexample.com -> 13.248.169.48
-www.example.com -> 104.18.27.120
+www.example.com -> 104.18.27.120example.com
+m.testexample.com
+www.example.com

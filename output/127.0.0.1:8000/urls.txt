@@ -1,0 +1,4 @@
+http://127.0.0.1:8000/api/v1/
+http://127.0.0.1:8000/robots.txt
+http://127.0.0.1:8000/static/css/checkout.css
+http://127.0.0.1:8000/static/themes/ischool2015/img/logo.png

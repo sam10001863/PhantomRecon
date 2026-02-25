@@ -98,7 +98,23 @@ echo 'export PATH=$PATH:$HOME/go/bin' >> ~/.profile
 source ~/.profile
 ```
 
----
+## Important Note About httpx
+
+Make sure you are using the ProjectDiscovery httpx tool.
+
+Do NOT install the Python package `httpx`.
+
+Correct installation:
+
+```
+go install github.com/projectdiscovery/httpx/cmd/httpx@latest
+```
+
+Verify version:
+
+```
+httpx -version
+```
 
 ## Usage
 

@@ -15,16 +15,19 @@ console = Console()
 def banner():
     ascii_banner = pyfiglet.figlet_format("PhantomRecon", font="slant")
     console.print(f"[green]{ascii_banner}[/green]")
-    console.print("[green]Android Professional Recon Engine v5.0[/green]")
+    console.print("[green]Android Professional Recon Engine v6.0[/green]")
     console.print("[green]Developed by Samrat Kharat[/green]\n")
 
 
 # ===================== TOOL CHECK =====================
 
 def check_tool(tool):
-    return subprocess.call(f"which {tool}", shell=True,
-                           stdout=subprocess.DEVNULL,
-                           stderr=subprocess.DEVNULL) == 0
+    return subprocess.call(
+        f"which {tool}",
+        shell=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    ) == 0
 
 
 def ensure_tool(tool, install_cmd):
@@ -38,10 +41,12 @@ def ensure_tool(tool, install_cmd):
     if choice == "y":
         subprocess.run(install_cmd, shell=True)
         return check_tool(tool)
+
+    console.print(f"[red]Skipping {tool} stage[/red]")
     return False
 
 
-# ===================== PROGRESS WRAPPER =====================
+# ===================== PROGRESS RUNNER =====================
 
 def run_with_progress(cmd, title):
     console.print(f"[green][*] {title}[/green]")
@@ -55,7 +60,6 @@ def run_with_progress(cmd, title):
     ) as progress:
 
         task = progress.add_task(title, total=100)
-
         process = subprocess.Popen(cmd, shell=True)
 
         while process.poll() is None:
@@ -101,6 +105,7 @@ def risk_score(subs, live, ports, vulns):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--domain", required=True)
+    parser.add_argument("--wordlist", help="Custom wordlist for directory bruteforce")
     parser.add_argument("--fast", action="store_true")
     parser.add_argument("--aggressive", action="store_true")
     parser.add_argument("--threads", type=int)
@@ -110,11 +115,15 @@ def main():
     banner()
 
     domain = args.domain
+
+    # Default wordlist logic
+    default_wordlist = "wordlists/common.txt"
+    wordlist = args.wordlist if args.wordlist else default_wordlist
+
     base_path = f"output/{domain}"
     os.makedirs(base_path, exist_ok=True)
 
     # ===== Mode Defaults =====
-
     port_mode = "top"
     severity = "medium,high"
     threads = 50
@@ -137,7 +146,6 @@ def main():
     console.print(f"[green]Threads: {threads} | Severity: {severity} | Port Mode: {port_mode}[/green]\n")
 
     # ===== Tool Checks =====
-
     subfinder_ok = ensure_tool("subfinder",
                                "export CGO_ENABLED=0 && go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest")
 
@@ -153,10 +161,15 @@ def main():
     gau_ok = ensure_tool("gau",
                          "export CGO_ENABLED=0 && go install github.com/lc/gau/v2/cmd/gau@latest")
 
+    ffuf_ok = ensure_tool("ffuf",
+                          "export CGO_ENABLED=0 && go install github.com/ffuf/ffuf@latest")
+
     nuclei_ok = ensure_tool("nuclei",
                             "export CGO_ENABLED=0 && go install github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest")
 
     console.print("\n[green][*] Starting Recon Workflow[/green]\n")
+
+    # ===== Workflow =====
 
     if subfinder_ok:
         run_with_progress(
@@ -188,6 +201,12 @@ def main():
         run_with_progress(
             f"gau {domain} > {base_path}/urls.txt",
             "URL Collection"
+        )
+
+    if ffuf_ok:
+        run_with_progress(
+            f"ffuf -u https://{domain}/FUZZ -w {wordlist} -t {threads} -mc 200 -o {base_path}/dirs.json",
+            "Directory Bruteforce"
         )
 
     if nuclei_ok:
