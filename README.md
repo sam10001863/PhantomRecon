@@ -88,6 +88,7 @@ go install github.com/projectdiscovery/httpx/cmd/httpx@latest
 go install github.com/projectdiscovery/dnsx/cmd/dnsx@latest
 go install github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
 go install github.com/lc/gau/v2/cmd/gau@latest
+go install github.com/ffuf/ffuf/v2@v2.1.0
 go install github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
 ```
 
