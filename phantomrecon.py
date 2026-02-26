@@ -62,10 +62,20 @@ def run_with_progress(cmd, title):
         task = progress.add_task(title, total=100)
         process = subprocess.Popen(cmd, shell=True)
 
-        while process.poll() is None:
-            if progress.tasks[0].completed < 95:
-                progress.update(task, advance=2)
-            time.sleep(0.2)
+        try:
+            while process.poll() is None:
+                if progress.tasks[0].completed < 95:
+                    progress.update(task, advance=2)
+                time.sleep(0.2)
+
+        except KeyboardInterrupt:
+            console.print(f"\n[red][!] {title} Skipped by User[/red]")
+            process.terminate()
+            time.sleep(1)
+            if process.poll() is None:
+                process.kill()
+            console.print(f"[yellow][→] Moving to Next Stage[/yellow]\n")
+            return
 
         progress.update(task, completed=100)
 
@@ -79,6 +89,41 @@ def count_lines(file):
         return 0
     with open(file) as f:
         return len([line for line in f if line.strip()])
+
+
+# ===================== SENSITIVE FILE CHECK =====================
+
+def sensitive_check(domain):
+    sensitive_files = [
+        ".env",
+        ".git/config",
+        "backup.zip",
+        "config.php",
+        "wp-config.php"
+    ]
+
+    exposed = []
+
+    console.print("[green][*] Sensitive File Check[/green]")
+
+    for file in sensitive_files:
+        try:
+            status = subprocess.check_output(
+                f"curl -s -o /dev/null -w '%{{http_code}}' https://{domain}/{file}",
+                shell=True
+            ).decode().strip()
+
+            if status == "200":
+                exposed.append(file)
+                console.print(f"[red][!] Exposed: {file}[/red]")
+
+        except:
+            pass
+
+    if not exposed:
+        console.print("[green][✓] No Sensitive Files Exposed[/green]\n")
+
+    return len(exposed)
 
 
 # ===================== RISK SCORING =====================
@@ -116,14 +161,13 @@ def main():
 
     domain = args.domain
 
-    # Default wordlist logic
     default_wordlist = "wordlists/common.txt"
     wordlist = args.wordlist if args.wordlist else default_wordlist
 
-    base_path = f"output/{domain}"
+    timestamp = time.strftime("%Y%m%d_%H%M%S")
+    base_path = f"output/{domain}/{timestamp}"
     os.makedirs(base_path, exist_ok=True)
 
-    # ===== Mode Defaults =====
     port_mode = "top"
     severity = "medium,high"
     threads = 50
@@ -145,7 +189,6 @@ def main():
 
     console.print(f"[green]Threads: {threads} | Severity: {severity} | Port Mode: {port_mode}[/green]\n")
 
-    # ===== Tool Checks =====
     subfinder_ok = ensure_tool("subfinder",
                                "export CGO_ENABLED=0 && go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest")
 
@@ -155,8 +198,7 @@ def main():
     httpx_ok = ensure_tool("httpx",
                            "export CGO_ENABLED=0 && go install github.com/projectdiscovery/httpx/cmd/httpx@latest")
 
-    naabu_ok = ensure_tool("naabu",
-                           "export CGO_ENABLED=0 && go install github.com/projectdiscovery/naabu/v2/cmd/naabu@latest")
+    nmap_ok = ensure_tool("nmap", "pkg install nmap")
 
     gau_ok = ensure_tool("gau",
                          "export CGO_ENABLED=0 && go install github.com/lc/gau/v2/cmd/gau@latest")
@@ -168,8 +210,6 @@ def main():
                             "export CGO_ENABLED=0 && go install github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest")
 
     console.print("\n[green][*] Starting Recon Workflow[/green]\n")
-
-    # ===== Workflow =====
 
     if subfinder_ok:
         run_with_progress(
@@ -189,11 +229,19 @@ def main():
             "Live Host Detection"
         )
 
-    if naabu_ok:
+    # ===== FIXED NMAP SECTION =====
+    if nmap_ok:
+
+        cleaned_hosts = f"{base_path}/live_hosts.txt"
+        subprocess.run(
+            f"cat {base_path}/live.txt | sed 's|http://||;s|https://||' > {cleaned_hosts}",
+            shell=True
+        )
+
         if port_mode == "full":
-            cmd = f"naabu -l {base_path}/live.txt -p - -rate {threads} -o {base_path}/ports.txt"
+            cmd = f"nmap -iL {cleaned_hosts} -p- -T4 -oN {base_path}/ports.txt"
         else:
-            cmd = f"naabu -l {base_path}/live.txt -top-ports 1000 -rate {threads} -o {base_path}/ports.txt"
+            cmd = f"nmap -iL {cleaned_hosts} --top-ports 1000 -T4 -oN {base_path}/ports.txt"
 
         run_with_progress(cmd, "Port Scanning")
 
@@ -215,7 +263,7 @@ def main():
             "Vulnerability Scanning"
         )
 
-    # ===== Summary =====
+    sensitive_count = sensitive_check(domain)
 
     subs = count_lines(f"{base_path}/subdomains.txt")
     live = count_lines(f"{base_path}/live.txt")
@@ -231,7 +279,8 @@ def main():
     console.print(f"[green]Subdomains  : {subs}[/green]")
     console.print(f"[green]Live Hosts  : {live}[/green]")
     console.print(f"[green]Open Ports  : {ports}[/green]")
-    console.print(f"[green]Vulnerabilities : {vulns}[/green]\n")
+    console.print(f"[green]Vulnerabilities : {vulns}[/green]")
+    console.print(f"[green]Sensitive Files : {sensitive_count}[/green]\n")
 
     console.print(f"[green]Risk Score  : {score}/10[/green]")
     console.print(f"[green]Risk Level  : {level}[/green]")
@@ -241,3 +290,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+

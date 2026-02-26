@@ -1,0 +1,12 @@
+# Output folders
+output/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Swap files
+*.swp
+
+# Environment
+.env

@@ -1,4 +1,4 @@
-# PhantomRecon
+# 🚀 PhantomRecon
 
 ![Python](https://img.shields.io/badge/Python-3.x-green)
 ![Platform](https://img.shields.io/badge/Platform-Termux%20%7C%20Linux-brightgreen)
@@ -11,177 +11,150 @@
 
 ---
 
-## Overview
+## 🔍 Overview
 
-PhantomRecon is an automated reconnaissance framework built for:
+PhantomRecon is a fully automated reconnaissance framework designed for:
 
-- Security Researchers  
 - Bug Bounty Hunters  
+- Security Researchers  
 - Red Team Operators  
+- Ethical Hackers  
 
-It solves a common problem:
+It answers the common question:
 
-**"What should I scan after subdomain enumeration?"**
+**“What should I scan after subdomain enumeration?”**
 
-PhantomRecon intelligently chains professional security tools into a structured reconnaissance workflow with:
+PhantomRecon intelligently chains professional security tools into a structured workflow with automated reporting and risk scoring.
 
-- Mode-based scanning
-- Manual argument override
-- Interactive tool installation
-- Risk scoring engine
-- Clean animated CLI interface
-- Mobile optimization (Termux ready)
+Optimized for Termux (Android) and Linux environments.
 
 ---
 
-## Features
+## ⚙️ Features
 
 - Subdomain Enumeration (subfinder)
 - DNS Resolution (dnsx)
 - Live Host Detection (httpx)
-- Port Scanning (naabu)
+- Port Scanning (Nmap)
 - URL Collection (gau)
+- Directory Bruteforce (ffuf)
 - Vulnerability Scanning (nuclei)
+- Sensitive File Detection
 - Risk Exposure Scoring
-- Mode-Based Scanning (Fast / Aggressive / Balanced)
-- Manual Overrides
-- Interactive Tool Checks
-- Professional CLI Output
+- Timestamp-Based Output Isolation
+- Ctrl+C Stage Skipping
+- Interactive Tool Installation Prompts
+- Termux Optimized
 
 ---
 
-## Installation (Termux)
+## 📦 Installation (Recommended for Termux)
 
-### 1. Update Environment
-
-```bash
-pkg update && pkg upgrade -y
-pkg install python golang git -y
-```
-
-### 2. Clone Repository
+### 1. Clone Repository
 
 ```bash
 git clone https://github.com/sam10001863/PhantomRecon.git
 cd PhantomRecon
 ```
 
-### 3. Install Python Dependencies
+### 2. Run Installer
 
 ```bash
-pip install -r requirements.txt
+chmod +x install.sh
+./install.sh
 ```
 
-### 4. Install Required Go Tools
-
-Disable CGO:
+### 3. Reload Environment
 
 ```bash
-export CGO_ENABLED=0
+source ~/.bashrc
 ```
 
-Install tools:
+---
+
+## ⚠️ Important Notes
+
+- This tool uses ProjectDiscovery httpx (NOT the Python httpx package).
+- Port scanning is handled by Nmap.
+- If tools are not detected after installation, run:
 
 ```bash
-go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
-go install github.com/projectdiscovery/httpx/cmd/httpx@latest
-go install github.com/projectdiscovery/dnsx/cmd/dnsx@latest
-go install github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
-go install github.com/lc/gau/v2/cmd/gau@latest
-go install github.com/ffuf/ffuf/v2@v2.1.0
-go install github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+source ~/.bashrc
 ```
 
-Add Go to PATH permanently:
+---
 
-```bash
-echo 'export PATH=$PATH:$HOME/go/bin' >> ~/.profile
-source ~/.profile
-```
-
-## Important Note About httpx
-
-Make sure you are using the ProjectDiscovery httpx tool.
-
-Do NOT install the Python package `httpx`.
-
-Correct installation:
-
-```
-go install github.com/projectdiscovery/httpx/cmd/httpx@latest
-```
-
-Verify version:
-
-```
-httpx -version
-```
-
-## Usage
+## 🚀 Usage
 
 ### Basic Scan (Balanced Default)
 
 ```bash
-python phantomrecon.py -d example.com
+python sam.py -d example.com
 ```
 
 ### Fast Mode
 
 ```bash
-python phantomrecon.py -d example.com --fast
+python sam.py -d example.com --fast
 ```
 
 ### Aggressive Mode
 
 ```bash
-python phantomrecon.py -d example.com --aggressive
+python sam.py -d example.com --aggressive
+```
+
+### Custom Wordlist
+
+```bash
+python sam.py -d example.com --wordlist wordlists/custom.txt
 ```
 
 ### Manual Override Example
 
 ```bash
-python phantomrecon.py -d example.com --aggressive --ports top --threads 80 --severity critical
+python sam.py -d example.com --aggressive --threads 80 --severity critical
 ```
 
 ---
 
-## Scan Modes
+## 🧠 Scan Modes
 
 | Mode | Description |
 |------|------------|
-| Default | Balanced scan |
-| --fast | Quick lightweight recon |
+| Default | Balanced reconnaissance |
+| --fast | Quick lightweight scan |
 | --aggressive | Deep full-scope scan |
-| --stealth | Low-rate scanning |
 
 Manual flags override mode defaults.
 
 ---
 
-## Output Structure
+## 📁 Output Structure
 
-All results are saved inside:
+Each scan is saved in a unique timestamped directory:
 
 ```
-output/<target_domain>/
+output/<domain>/<timestamp>/
 ```
 
 Example:
 
 ```
-output/example.com/
-│
+output/example.com/20260226_113004/
 ├── subdomains.txt
 ├── resolved.txt
 ├── live.txt
+├── live_hosts.txt
 ├── ports.txt
 ├── urls.txt
-└── vulns.txt
+├── dirs.json
+├── vulns.txt
 ```
 
 ---
 
-## Risk Scoring
+## 📊 Risk Scoring System
 
 PhantomRecon calculates exposure level based on:
 
@@ -189,6 +162,7 @@ PhantomRecon calculates exposure level based on:
 - Live hosts detected
 - Open ports
 - Vulnerabilities discovered
+- Sensitive files exposed
 
 Risk Levels:
 
@@ -198,7 +172,7 @@ Risk Levels:
 
 ---
 
-## Example Final Output
+## 🖥 Example Final Output
 
 ```
 PhantomRecon Final Report
@@ -207,6 +181,7 @@ Subdomains  : 187
 Live Hosts  : 92
 Open Ports  : 18
 Vulnerabilities : 6
+Sensitive Files : 1
 
 Risk Score  : 7/10
 Risk Level  : HIGH
@@ -214,7 +189,7 @@ Risk Level  : HIGH
 
 ---
 
-## Disclaimer
+## 🔐 Disclaimer
 
 This tool is intended for authorized security testing and educational purposes only.
 
@@ -224,24 +199,13 @@ Always obtain proper permission before scanning any target.
 
 ---
 
-## Author
+## 👨‍💻 Author
 
 Samrat Kharat  
 GitHub: https://github.com/sam10001863
 
 ---
 
-## Roadmap
-
-- HTML Reporting
-- JSON Export
-- Service-Aware Scanning
-- Resume Sessions
-- CVE Enrichment
-- Parallel Execution Engine
-
----
-
-## License
+## 📜 License
 
 MIT License
