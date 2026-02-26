@@ -1,4 +1,4 @@
-# 🚀 PhantomRecon
+# PhantomRecon
 
 ![Python](https://img.shields.io/badge/Python-3.x-green)
 ![Platform](https://img.shields.io/badge/Platform-Termux%20%7C%20Linux-brightgreen)
@@ -7,84 +7,90 @@
 ![Stars](https://img.shields.io/github/stars/sam10001863/PhantomRecon?style=social)
 
 > Android Professional Recon Engine  
-> Developed by Samrat Kharat
+> Developed by Samrat Kharat  
 
 ---
 
-## 🔍 Overview
+## Overview
 
-PhantomRecon is a fully automated reconnaissance framework designed for:
+PhantomRecon is an automated reconnaissance framework built for:
 
-- Bug Bounty Hunters  
 - Security Researchers  
+- Bug Bounty Hunters  
 - Red Team Operators  
-- Ethical Hackers  
 
-It answers the common question:
+It solves a common problem:
 
-**“What should I scan after subdomain enumeration?”**
+**"What should I scan after subdomain enumeration?"**
 
-PhantomRecon intelligently chains professional security tools into a structured workflow with automated reporting and risk scoring.
+PhantomRecon intelligently chains professional security tools into a structured reconnaissance workflow with:
 
-Optimized for Termux (Android) and Linux environments.
-
----
-
-## ⚙️ Features
-
-- Subdomain Enumeration (subfinder)
-- DNS Resolution (dnsx)
-- Live Host Detection (httpx)
-- Port Scanning (Nmap)
-- URL Collection (gau)
-- Directory Bruteforce (ffuf)
-- Vulnerability Scanning (nuclei)
-- Sensitive File Detection
-- Risk Exposure Scoring
-- Timestamp-Based Output Isolation
-- Ctrl+C Stage Skipping
-- Interactive Tool Installation Prompts
-- Termux Optimized
+- Mode-based scanning  
+- Manual argument override  
+- Interactive tool installation  
+- Risk scoring engine  
+- Clean animated CLI interface  
+- Mobile optimization (Termux ready)  
 
 ---
 
-## 📦 Installation (Recommended for Termux)
+## Features
 
-### 1. Clone Repository
+- Subdomain Enumeration (subfinder)  
+- DNS Resolution (dnsx)  
+- Live Host Detection (httpx)  
+- Port Scanning (nmap)  
+- URL Collection (gau)  
+- Directory Bruteforce (ffuf)  
+- Vulnerability Scanning (nuclei)  
+- Risk Exposure Scoring  
+- Mode-Based Scanning (Fast / Aggressive / Balanced)  
+- Manual Overrides  
+- Interactive Tool Checks  
+- Professional CLI Output  
+
+---
+
+## Installation (Termux)
+
+### 1. Update & Install Base Dependencies
+
+```bash
+pkg update && pkg upgrade -y
+pkg install git curl wget unzip python python-pip nmap libpcap -y
+```
+
+### 2. Clone Repository
 
 ```bash
 git clone https://github.com/sam10001863/PhantomRecon.git
 cd PhantomRecon
 ```
 
-### 2. Run Installer
+### 3. Run Installer (Recommended)
 
 ```bash
 chmod +x install.sh
-./install.sh
+bash install.sh
 ```
 
-### 3. Reload Environment
+This installer automatically installs:
 
-```bash
-source ~/.bashrc
-```
+- subfinder  
+- dnsx  
+- httpx  
+- nuclei  
+- gau  
+- ffuf  
+- nmap  
+
+Using official ARM64 binaries (no Go compilation required).
+
+⚠️ Go is NOT required. Tools are installed via official ARM64 binaries for maximum stability on Termux.
 
 ---
 
-## ⚠️ Important Notes
-
-- This tool uses ProjectDiscovery httpx (NOT the Python httpx package).
-- Port scanning is handled by Nmap.
-- If tools are not detected after installation, run:
-
-```bash
-source ~/.bashrc
-```
-
----
-
-## 🚀 Usage
+## Usage
 
 ### Basic Scan (Balanced Default)
 
@@ -104,12 +110,6 @@ python phantomrecon.py -d example.com --fast
 python phantomrecon.py -d example.com --aggressive
 ```
 
-### Custom Wordlist
-
-```bash
-python phantomrecon.py -d example.com --wordlist wordlists/custom.txt
-```
-
 ### Manual Override Example
 
 ```bash
@@ -118,62 +118,59 @@ python phantomrecon.py -d example.com --aggressive --threads 80 --severity criti
 
 ---
 
-## 🧠 Scan Modes
+## Scan Modes
 
 | Mode | Description |
 |------|------------|
-| Default | Balanced reconnaissance |
-| --fast | Quick lightweight scan |
+| Default | Balanced scan |
+| --fast | Quick lightweight recon |
 | --aggressive | Deep full-scope scan |
-| --severity | low,medium,high
 
 Manual flags override mode defaults.
 
 ---
 
-## 📁 Output Structure
+## Output Structure
 
-Each scan is saved in a unique timestamped directory:
+All results are saved inside:
 
 ```
-output/<domain>/<timestamp>/
+output/<target_domain>/<timestamp>/
 ```
 
 Example:
 
 ```
-output/example.com/20260226_113004/
+output/example.com/
 ├── subdomains.txt
 ├── resolved.txt
 ├── live.txt
-├── live_hosts.txt
 ├── ports.txt
 ├── urls.txt
 ├── dirs.json
-├── vulns.txt
+└── vulns.txt
 ```
 
 ---
 
-## 📊 Risk Scoring System
+## Risk Scoring
 
 PhantomRecon calculates exposure level based on:
 
-- Number of subdomains
-- Live hosts detected
-- Open ports
-- Vulnerabilities discovered
-- Sensitive files exposed
+- Number of subdomains  
+- Live hosts detected  
+- Open ports  
+- Vulnerabilities discovered  
 
 Risk Levels:
 
-- LOW
-- MEDIUM
-- HIGH
+- LOW  
+- MEDIUM  
+- HIGH  
 
 ---
 
-## 🖥 Example Final Output
+## Example Final Output
 
 ```
 PhantomRecon Final Report
@@ -182,7 +179,6 @@ Subdomains  : 187
 Live Hosts  : 92
 Open Ports  : 18
 Vulnerabilities : 6
-Sensitive Files : 1
 
 Risk Score  : 7/10
 Risk Level  : HIGH
@@ -190,23 +186,32 @@ Risk Level  : HIGH
 
 ---
 
-## 🔐 Disclaimer
+## Disclaimer
 
-This tool is intended for authorized security testing and educational purposes only.
-
-The author is not responsible for misuse or illegal activities.
-
-Always obtain proper permission before scanning any target.
+This tool is intended for authorized security testing and educational purposes only.  
+The author is not responsible for misuse or illegal activities.  
+Always obtain proper permission before scanning any target.  
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 Samrat Kharat  
-GitHub: https://github.com/sam10001863
+GitHub: https://github.com/sam10001863  
 
 ---
 
-## 📜 License
+## Roadmap
+
+- HTML Reporting  
+- JSON Export  
+- Service-Aware Scanning  
+- Resume Sessions  
+- CVE Enrichment  
+- Parallel Execution Engine  
+
+---
+
+## License
 
 MIT License
