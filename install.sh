@@ -7,6 +7,9 @@ pkg upgrade -y
 echo "[*] Installing dependencies..."
 pkg install -y git curl wget python python-pip go nmap libpcap
 
+echo "[*] Installing Python dependencies..."
+pip install rich pyfiglet
+
 echo "[*] Setting Go environment..."
 echo 'export PATH=$PATH:$HOME/go/bin' >> ~/.bashrc
 export PATH=$PATH:$HOME/go/bin
@@ -27,5 +30,4 @@ mkdir -p wordlists
 
 echo "[✓] Installation Complete"
 echo "[!] Restart Termux or run: source ~/.bashrc"
-
 
