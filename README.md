@@ -89,31 +89,31 @@ source ~/.bashrc
 ### Basic Scan (Balanced Default)
 
 ```bash
-python sam.py -d example.com
+python phantomrecon.py -d example.com
 ```
 
 ### Fast Mode
 
 ```bash
-python sam.py -d example.com --fast
+python phantomrecon.py -d example.com --fast
 ```
 
 ### Aggressive Mode
 
 ```bash
-python sam.py -d example.com --aggressive
+python phantomrecon.py -d example.com --aggressive
 ```
 
 ### Custom Wordlist
 
 ```bash
-python sam.py -d example.com --wordlist wordlists/custom.txt
+python phantomrecon.py -d example.com --wordlist wordlists/custom.txt
 ```
 
 ### Manual Override Example
 
 ```bash
-python sam.py -d example.com --aggressive --threads 80 --severity critical
+python phantomrecon.py -d example.com --aggressive --threads 80 --severity critical
 ```
 
 ---
@@ -125,6 +125,7 @@ python sam.py -d example.com --aggressive --threads 80 --severity critical
 | Default | Balanced reconnaissance |
 | --fast | Quick lightweight scan |
 | --aggressive | Deep full-scope scan |
+| --severity | low,medium,high
 
 Manual flags override mode defaults.
 
