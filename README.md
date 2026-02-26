@@ -25,6 +25,14 @@ It solves a common problem:
 
 PhantomRecon intelligently chains professional security tools into a structured reconnaissance workflow with:
 
+---
+
+## Demo
+
+![PhantomRecon Demo](demo.png)
+
+---
+
 - Mode-based scanning  
 - Manual argument override  
 - Interactive tool installation  
