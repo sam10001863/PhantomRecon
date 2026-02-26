@@ -84,9 +84,6 @@ This installer automatically installs:
 - ffuf  
 - nmap  
 
-Using official ARM64 binaries (no Go compilation required).
-
-⚠️ Go is NOT required. Tools are installed via official ARM64 binaries for maximum stability on Termux.
 
 ---
 
